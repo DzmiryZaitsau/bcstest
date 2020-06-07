@@ -1,7 +1,7 @@
 package com.my.btstask.view;
 
-import com.my.btstask.domain.Person;
-import com.my.btstask.repositories.PersonRepository;
+import com.my.btstask.domain.Contact;
+import com.my.btstask.repositories.ContactRepository;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -9,14 +9,21 @@ import com.vaadin.flow.router.Route;
 @Route
 public class MainPage extends VerticalLayout
 {
-    private final PersonRepository personRepository;
+    private final ContactRepository contactRepository;
 
-    private Grid<Person> grid = new Grid<>(Person.class);
+    private Grid<Contact> gridContact = new Grid<>(Contact.class);
 
-    public MainPage(final PersonRepository personRepository)
+    public MainPage(final ContactRepository contactRepository)
     {
-        this.personRepository = personRepository;
-        add(grid);
-        grid.setItems(personRepository.findAll());
+        this.contactRepository = contactRepository;
+        add(gridContact);
+        gridContact.setItems(contactRepository.findAll());
+        gridContact.addColumn(contact -> contact.getPerson().getId());
+        gridContact.addColumn(contact -> contact.getPerson().getName());
+        gridContact.removeColumnByKey("id");
+        gridContact.removeColumnByKey("person");
+        gridContact.removeColumnByKey("telephone");
+        gridContact.addColumn(Contact::getTelephone);
+
     }
 }
