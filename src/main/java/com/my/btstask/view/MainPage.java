@@ -1,7 +1,7 @@
 package com.my.btstask.view;
 
 import com.my.btstask.components.ContactEditor;
-import com.my.btstask.domain.Contact;
+import com.my.btstask.domain.DTO.ContactDTO;
 import com.my.btstask.repositories.ContactRepository;
 import com.my.btstask.service.ContactService;
 import com.vaadin.flow.component.button.Button;
@@ -17,7 +17,7 @@ public class MainPage extends VerticalLayout
 {
     private final ContactRepository contactRepository;
 
-    private Grid<Contact> gridContact = new Grid<>(Contact.class);
+    private Grid<ContactDTO> gridContact = new Grid<>(ContactDTO.class);
     private ContactService contactService = new ContactService();
     private final TextField filter = new TextField("", "Type to filter");;
     private final Button addNewPerson = new Button("Add new");

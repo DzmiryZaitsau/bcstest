@@ -1,21 +1,19 @@
 package com.my.btstask.service;
 
-import com.my.btstask.domain.Contact;
+import com.my.btstask.domain.DTO.ContactDTO;
+import com.my.btstask.mapper.AbstractContactMapper;
+import com.my.btstask.mapper.AbstractContactMapperImpl;
 import com.my.btstask.repositories.ContactRepository;
 import com.vaadin.flow.component.grid.Grid;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public class ContactService
-{
-    public void showPersons(String name, ContactRepository repository, Grid<Contact> gridContact) {
+public class ContactService {
+    private AbstractContactMapper abstractContactMapper = new AbstractContactMapperImpl();
+    public void showPersons(String name, ContactRepository repository, Grid<ContactDTO> gridContact) {
         if(name.isEmpty()) {
-            gridContact.setItems(repository.findAll());
-            gridContact.addColumn(contact -> contact.getPerson().getName());
-            gridContact.removeColumnByKey("person");
-            gridContact.removeColumnByKey("telephone");
-            gridContact.addColumn(Contact::getTelephone);
+            gridContact.setItems(abstractContactMapper.toContactDTO(repository.findAll()));
+            gridContact.removeColumnByKey("idContact");
         }
-        else gridContact.setItems(repository.findByName(name));
+        else gridContact.setItems(abstractContactMapper.toContactDTO(repository.findByName(name)));
 
     }
 }

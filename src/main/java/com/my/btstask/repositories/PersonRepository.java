@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface PersonRepository extends JpaRepository<Person, Long>
 {
-    @Query("from Person  p where p.name like concat(:name,'%') ")
+    @Query("from Person  p inner join Contact c where p.name like concat(:name,'%') ")
     List<Person> findByName(@Param("name") String name);
 }

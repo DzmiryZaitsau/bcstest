@@ -1,6 +1,9 @@
 package com.my.btstask.components;
 
 import com.my.btstask.domain.Contact;
+import com.my.btstask.domain.DTO.ContactDTO;
+import com.my.btstask.mapper.AbstractContactMapper;
+import com.my.btstask.mapper.AbstractContactMapperImpl;
 import com.my.btstask.repositories.ContactRepository;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyNotifier;
@@ -19,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ContactEditor extends VerticalLayout implements KeyNotifier
 {
     private ContactRepository contactRepository;
+    private AbstractContactMapper abstractContactMapper = new AbstractContactMapperImpl();
     private Contact contact;
     private TextField telephone = new TextField("", "telephone");
     private Button save = new Button("Save");
@@ -50,7 +54,7 @@ public class ContactEditor extends VerticalLayout implements KeyNotifier
 
         save.addClickListener(e -> save());
         delete.addClickListener(e -> delete());
-        cancel.addClickListener(e -> editContact(contact));
+        cancel.addClickListener(e -> editContact(abstractContactMapper.toContactDTO(contact)));
         setVisible(false);
     }
 
@@ -66,7 +70,7 @@ public class ContactEditor extends VerticalLayout implements KeyNotifier
         changeHandler.onChange();
     }
 
-    public void editContact(Contact cont)
+    public void editContact(ContactDTO cont)
     {
         if (cont == null) {
             setVisible(false);
@@ -74,9 +78,9 @@ public class ContactEditor extends VerticalLayout implements KeyNotifier
         }
 
         if (cont.getId() != 0) {
-            this.contact = contactRepository.findById(cont.getId()).orElse(cont);
+            this.contact = contactRepository.findById(cont.getIdContact()).orElse(abstractContactMapper.toContact(cont));
         } else {
-            this.contact = cont;
+            this.contact = abstractContactMapper.toContact(cont);
         }
 
         binder.setBean(this.contact);
