@@ -28,7 +28,14 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier
 
     private Binder<Person> binder = new Binder<>(Person.class);
     @Setter
-    private ChangeHandler changeHandler;
+    private ChangeHandler changeHandler = new ChangeHandler()
+    {
+        @Override
+        public void onChange()
+        {
+
+        }
+    };
 
     public interface ChangeHandler
     {

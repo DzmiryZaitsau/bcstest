@@ -77,7 +77,7 @@ public class ContactEditor extends VerticalLayout implements KeyNotifier
             return;
         }
 
-        if (cont.getId() != 0) {
+        if (cont.getId() != null) {
             this.contact = contactRepository.findById(cont.getIdContact()).orElse(abstractContactMapper.toContact(cont));
         } else {
             this.contact = abstractContactMapper.toContact(cont);
