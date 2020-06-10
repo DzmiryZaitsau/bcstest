@@ -19,10 +19,11 @@ public class MainPage extends VerticalLayout
 
     private Grid<ContactDTO> gridContact = new Grid<>(ContactDTO.class);
     private ContactService contactService = new ContactService();
-    private final TextField filter = new TextField("", "Type to filter");;
+    private final TextField filter = new TextField("", "Filter by Name");
+    private final TextField filterId = new TextField("", "Filter by Id");
     private final Button addNewPerson = new Button("Add new");
     private final ContactEditor contactEditor;
-    private final HorizontalLayout toolbar = new HorizontalLayout(filter, addNewPerson);
+    private final HorizontalLayout toolbar = new HorizontalLayout(filter,filterId, addNewPerson);
 
     public MainPage(final ContactRepository contactRepository, final ContactEditor contactEditor)
     {
@@ -31,10 +32,12 @@ public class MainPage extends VerticalLayout
         add(toolbar, gridContact, contactEditor);
         filter.setValueChangeMode(ValueChangeMode.EAGER);
         filter.addValueChangeListener(e -> contactService.showPersons(e.getValue(), contactRepository, gridContact));
+        filterId.setValueChangeMode(ValueChangeMode.EAGER);
+        filterId.addValueChangeListener(e -> contactService.showPersonsById(Long.parseLong(e.getValue()), contactRepository, gridContact));
 
-        gridContact.asSingleSelect().addValueChangeListener(e -> {
-            this.contactEditor.editContact(e.getValue());
-                });
+        gridContact.asSingleSelect().addValueChangeListener(e ->
+            this.contactEditor.editContact(e.getValue())
+                );
         contactService.showPersons("", contactRepository, gridContact);
 
 

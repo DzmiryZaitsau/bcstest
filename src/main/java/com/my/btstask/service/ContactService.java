@@ -16,4 +16,12 @@ public class ContactService {
         else gridContact.setItems(abstractContactMapper.toContactDTO(repository.findByName(name)));
 
     }
+    public void showPersonsById(Long id, ContactRepository repository, Grid<ContactDTO> gridContact) {
+        if(id==null) {
+            gridContact.setItems(abstractContactMapper.toContactDTO(repository.findAll()));
+            gridContact.removeColumnByKey("idContact");
+        }
+        else gridContact.setItems(abstractContactMapper.toContactDTO(repository.findAll(id)));
+
+    }
 }
