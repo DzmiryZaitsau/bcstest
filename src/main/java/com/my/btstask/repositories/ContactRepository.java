@@ -14,4 +14,7 @@ public interface ContactRepository extends JpaRepository<Contact, Long>
 
     @Query("from Contact  c where c.person.id=:id")
     List<Contact> findAll(@Param("id") Long id);
+
+    @Query("from Contact  c order by c.person.name")
+    List<Contact> findAll();
 }
