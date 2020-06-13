@@ -15,6 +15,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 
 @Route
 public class MainPage extends VerticalLayout
@@ -23,13 +24,13 @@ public class MainPage extends VerticalLayout
 
     private Grid<ContactDTO> gridContact = new Grid<>(ContactDTO.class);
     private ContactService contactService = new ContactService();
-    private AbstractContactMapper abstractContactMapper = new AbstractContactMapperImpl();
+    private final AbstractContactMapper abstractContactMapper = new AbstractContactMapperImpl();
     private final TextField filter = new TextField("", "Filter by Name");
     private final TextField filterId = new TextField("", "Filter by Id");
-    private final TextField findPersonByName = new TextField("", "Filter by Id");
+    private RouterLink linkPerson = new RouterLink("Show All Person", PersonPage.class);
     private final Button addNewPerson = new Button("New person", VaadinIcon.PLUS.create());
     private final PersonEditor personEditor;
-    private final HorizontalLayout toolbar = new HorizontalLayout(filter,filterId, addNewPerson);
+    private final HorizontalLayout toolbar = new HorizontalLayout(filter,filterId, linkPerson, addNewPerson);
 
     public MainPage( ContactRepository contactRepository, PersonEditor personEditor)
     {
@@ -42,8 +43,7 @@ public class MainPage extends VerticalLayout
         filterId.addValueChangeListener(e -> contactService.showPersonsById(Long.parseLong(e.getValue()), contactRepository, gridContact));
 
         gridContact.asSingleSelect().addValueChangeListener(e ->
-            this.personEditor.editPerson(abstractContactMapper.toContact(e.getValue()).getPerson())
-                );
+            this.personEditor.editPerson(abstractContactMapper.toContact(e.getValue()).getPerson()));
         addNewPerson.addClickListener(e -> this.personEditor.editPerson(new Person()));
 
         contactService.showPersons("", contactRepository, gridContact);
