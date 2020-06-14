@@ -1,6 +1,9 @@
 package com.my.btstask.components;
 
+import com.my.btstask.domain.DTO.PersonDTO;
 import com.my.btstask.domain.Person;
+import com.my.btstask.mapper.PersonMapper;
+import com.my.btstask.mapper.PersonMapperImpl;
 import com.my.btstask.repositories.PersonRepository;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyNotifier;
@@ -19,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class PersonEditor extends VerticalLayout implements KeyNotifier
 {
     private PersonRepository personRepository;
+    private PersonMapper personMapper = new PersonMapperImpl();
     private Person person;
     private TextField name = new TextField("", "Name");
     private Button save = new Button("Save");
@@ -57,7 +61,7 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier
 
         save.addClickListener(e -> save());
         delete.addClickListener(e -> delete());
-        cancel.addClickListener(e -> editPerson(person));
+        cancel.addClickListener(e -> editPerson(personMapper.toPersonDTO(person)));
         setVisible(false);
     }
 
@@ -73,17 +77,21 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier
         changeHandler.onChange();
     }
 
-    public void editPerson(Person pers)
+    public void editPerson(PersonDTO pers)
     {
-        if (pers == null) {
+        if (pers == null)
+        {
             setVisible(false);
             return;
         }
 
-        if (pers.getId() != 0) {
-            this.person = personRepository.findById(pers.getId()).orElse(pers);
-        } else {
-            this.person = pers;
+        if (pers.getId() != 0)
+        {
+            this.person = personRepository.findById(pers.getId()).orElse(personMapper.toPerson(pers));
+        }
+        else
+        {
+            this.person = personMapper.toPerson(pers);
         }
 
         binder.setBean(this.person);

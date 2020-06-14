@@ -5,6 +5,8 @@ import com.my.btstask.domain.DTO.ContactDTO;
 import com.my.btstask.domain.Person;
 import com.my.btstask.mapper.AbstractContactMapper;
 import com.my.btstask.mapper.AbstractContactMapperImpl;
+import com.my.btstask.mapper.PersonMapper;
+import com.my.btstask.mapper.PersonMapperImpl;
 import com.my.btstask.repositories.ContactRepository;
 import com.my.btstask.service.ContactService;
 import com.vaadin.flow.component.button.Button;
@@ -25,6 +27,7 @@ public class MainPage extends VerticalLayout
     private Grid<ContactDTO> gridContact = new Grid<>(ContactDTO.class);
     private ContactService contactService = new ContactService();
     private final AbstractContactMapper abstractContactMapper = new AbstractContactMapperImpl();
+    private final PersonMapper personMapper = new PersonMapperImpl();
     private final TextField filter = new TextField("", "Filter by Name");
     private final TextField filterId = new TextField("", "Filter by Id");
     private RouterLink linkPerson = new RouterLink("Show All Person", PersonPage.class);
@@ -43,8 +46,9 @@ public class MainPage extends VerticalLayout
         filterId.addValueChangeListener(e -> contactService.showPersonsById(Long.parseLong(e.getValue()), contactRepository, gridContact));
 
         gridContact.asSingleSelect().addValueChangeListener(e ->
-            this.personEditor.editPerson(abstractContactMapper.toContact(e.getValue()).getPerson()));
-        addNewPerson.addClickListener(e -> this.personEditor.editPerson(new Person()));
+            this.personEditor.editPerson(personMapper.toPersonDTO
+                    (abstractContactMapper.toContact(e.getValue()).getPerson())));
+        addNewPerson.addClickListener(e -> this.personEditor.editPerson(personMapper.toPersonDTO(new Person())));
 
         contactService.showPersons("", contactRepository, gridContact);
 
