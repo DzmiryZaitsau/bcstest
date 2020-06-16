@@ -1,27 +1,19 @@
 package com.my.btstask.service;
 
-import com.my.btstask.domain.DTO.ContactDTO;
-import com.my.btstask.mapper.AbstractContactMapper;
-import com.my.btstask.mapper.AbstractContactMapperImpl;
-import com.my.btstask.repositories.ContactRepository;
-import com.vaadin.flow.component.grid.Grid;
+import com.my.btstask.domain.Contact;
+import org.springframework.data.repository.query.Param;
 
-public class ContactService {
-    private AbstractContactMapper abstractContactMapper = new AbstractContactMapperImpl();
-    public void showPersons(String name, ContactRepository repository, Grid<ContactDTO> gridContact) {
-        if(name.isEmpty()) {
-            gridContact.setItems(abstractContactMapper.toContactDTO(repository.findAll()));
-            gridContact.removeColumnByKey("idContact");
-        }
-        else gridContact.setItems(abstractContactMapper.toContactDTO(repository.findByName(name)));
+import java.util.List;
 
-    }
-    public void showPersonsById(Long id, ContactRepository repository, Grid<ContactDTO> gridContact) {
-        if(id==null) {
-            gridContact.setItems(abstractContactMapper.toContactDTO(repository.findAll()));
-            gridContact.removeColumnByKey("idContact");
-        }
-        else gridContact.setItems(abstractContactMapper.toContactDTO(repository.findAll(id)));
+public interface ContactService
+{
+    List<Contact> findByName(@Param("name") String name);
 
-    }
+    List<Contact> findAll(@Param("id") Long id);
+
+    List<Contact> findAll();
+
+    void save(Contact contact);
+
+    void delete(Contact contact);
 }
