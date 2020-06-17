@@ -8,28 +8,29 @@ import com.my.btstask.repositories.ContactRepository;
 import com.my.btstask.service.ContactService;
 import com.vaadin.flow.component.grid.Grid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class ContactServiceImpl implements ContactService
 {
     @Autowired
     ContactRepository contactRepository;
     private AbstractContactMapper abstractContactMapper = new AbstractContactMapperImpl();
-    public void showPersons(String name, ContactRepository repository, Grid<ContactDTO> gridContact) {
+    public void showPersons(String name, Grid<ContactDTO> gridContact) {
         if(name.isEmpty()) {
-            gridContact.setItems(abstractContactMapper.toContactDTO(repository.findAll()));
+            gridContact.setItems(abstractContactMapper.toContactDTO(findAll()));
             gridContact.removeColumnByKey("idContact");
         }
-        else gridContact.setItems(abstractContactMapper.toContactDTO(repository.findByName(name)));
+        else gridContact.setItems(abstractContactMapper.toContactDTO(findByName(name)));
 
     }
-    public void showPersonsById(Long id, ContactRepository repository, Grid<ContactDTO> gridContact) {
+    public void showPersonsById(Long id, Grid<ContactDTO> gridContact) {
         if(id==null) {
-            gridContact.setItems(abstractContactMapper.toContactDTO(repository.findAll()));
+            gridContact.setItems(abstractContactMapper.toContactDTO(findAll()));
             gridContact.removeColumnByKey("idContact");
         }
-        else gridContact.setItems(abstractContactMapper.toContactDTO(repository.findAll(id)));
+        else gridContact.setItems(abstractContactMapper.toContactDTO(findAll(id)));
 
     }
 

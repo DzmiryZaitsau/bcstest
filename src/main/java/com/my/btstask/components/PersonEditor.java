@@ -4,7 +4,7 @@ import com.my.btstask.domain.DTO.PersonDTO;
 import com.my.btstask.domain.Person;
 import com.my.btstask.mapper.PersonMapper;
 import com.my.btstask.mapper.PersonMapperImpl;
-import com.my.btstask.repositories.PersonRepository;
+import com.my.btstask.service.Impl.PersonServiceImpl;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyNotifier;
 import com.vaadin.flow.component.button.Button;
@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @UIScope
 public class PersonEditor extends VerticalLayout implements KeyNotifier
 {
-    private PersonRepository personRepository;
+    private PersonServiceImpl personServiceImpl;// = new PersonServiceImpl();
     private PersonMapper personMapper = new PersonMapperImpl();
     private Person person;
     private TextField name = new TextField("", "Name");
@@ -47,9 +47,9 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier
     }
 
     @Autowired
-    public PersonEditor(PersonRepository personRepository)
+    public PersonEditor(PersonServiceImpl personServiceImpl)
     {
-        this.personRepository = personRepository;
+        this.personServiceImpl = personServiceImpl;
         add(name, buttons);
         binder.bindInstanceFields(this);
         setSpacing(true);
@@ -67,13 +67,13 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier
 
     private void save()
     {
-        personRepository.save(person);
+        personServiceImpl.save(person);
         changeHandler.onChange();
     }
 
     private void delete()
     {
-        personRepository.delete(person);
+        personServiceImpl.delete(person);
         changeHandler.onChange();
     }
 
@@ -87,7 +87,7 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier
 
         if (pers.getId() != 0)
         {
-            this.person = personRepository.findById(pers.getId()).orElse(personMapper.toPerson(pers));
+            this.person = personServiceImpl.findById(pers.getId()).orElse(personMapper.toPerson(pers));
         }
         else
         {
