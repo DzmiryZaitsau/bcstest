@@ -13,11 +13,6 @@ public class PersonServiceImpl implements PersonService
 {
     @Autowired
     PersonRepository personRepository;
-    @Override
-    public List<Person> findByName(final String name)
-    {
-        return personRepository.findByName(name);
-    }
 
     @Override
     public Optional<Person> findById(final long id)
