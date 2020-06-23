@@ -53,4 +53,15 @@ public class Contact
     {
         this.person = person;
     }
+
+    public Contact()
+    {
+    }
+
+    public Contact(long id, String telephone, Person person)
+    {
+        this.id=id;
+        this.telephone=telephone;
+        this.person=person;
+    }
 }
